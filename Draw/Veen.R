@@ -1,14 +1,16 @@
-list<-read.csv("/list.csv")
+## 读取文件
+library(readxl)
+list<-read_excel("C:\\Users\\王勇\\Desktop\\课题\\生信\\脑胶质瘤论文复刻\\工作数据\\下调.xlsx",col_names =FALSE)
 head(list)
 
-
 ## 单独提出各个list
-listA<-list$A
-listB<-list$B
-listC<-list$C
-listD<-list$D
-listE<-list$E
-listF<-list$F
+listA<-list$...1
+listB<-list$...2
+listC<-list$...3
+listD<-list$...4
+listE<-list$...5
+listF<-list$...6
+
 ## 去除各自列表的重复值
 listA<-listA[!duplicated(listA)]
 listB<-listB[!duplicated(listB)]
@@ -16,6 +18,7 @@ listC<-listC[!duplicated(listC)]
 listD<-listD[!duplicated(listD)]
 listE<-listE[!duplicated(listE)]
 listF<-listF[!duplicated(listF)]
+
 ## 去除各自列表的NA值
 listA<-na.omit(listA)
 listB<-na.omit(listB)
@@ -23,12 +26,20 @@ listC<-na.omit(listC)
 listD<-na.omit(listD)
 listE<-na.omit(listE)
 listF<-na.omit(listF)
+
 ## 合并list
 list<-list(A=listA,B=listB,C=listC,D=listD,E=listE,F=listF)
 
 library(ggVennDiagram)
 ggVennDiagram(list)
 
+## 导出交集元素
+inter <- get.venn.partitions(list)
+getdata=inter[1,5]
+getdata
+write.csv(getdata,"getdata.csv",row.names = FALSE)
+
+## 图像调参
 ggVennDiagram(
   x,
   category.names = names(x), #自定义数据集的名称
