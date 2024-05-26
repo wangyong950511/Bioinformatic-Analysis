@@ -1,10 +1,24 @@
-{
-  "server": "example.com",
-  "server_port": 8388,
-  "local_address": "127.0.0.1",
-  "local_port": 1080,
-  "password": "password",
-  "timeout": 300,
-  "method": "aes-256-gcm",
-  "acl": "/path/to/aclfile.acl"
-}
+[proxy_all]
+# 默认使用代理的行为
+
+[bypass_list]
+# 以下域名直连
+DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,example.com
+DOMAIN,anotherexample.com
+
+[proxy_list]
+# 以下域名通过代理
+DOMAIN-SUFFIX,facebook.com
+DOMAIN-SUFFIX,youtube.com
+
+[bypass_ip]
+# 以下IP直连
+IP-CIDR,192.168.0.0/16
+IP-CIDR,10.0.0.0/8
+IP-CIDR,127.0.0.0/8
+
+[proxy_ip]
+# 以下IP通过代理
+IP-CIDR,8.8.8.8/32
+IP-CIDR,8.8.4.4/32
