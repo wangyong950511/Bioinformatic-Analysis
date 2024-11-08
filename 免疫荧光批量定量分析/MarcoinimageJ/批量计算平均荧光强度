@@ -1,0 +1,42 @@
+// ImageJ 宏，用于批量测量一个文件夹内所有图片的平均荧光强度
+// 将结果导出为 CSV 文件
+
+// 选择包含图片的文件夹
+inputDir = getDirectory("选择包含图片的文件夹");
+outputFile = "/Users/wangyong/Desktop/output1.csv";
+
+// 打开文件输出
+file = File.open(outputFile, "w");
+print(file, "Filename, Mean Intensity");  // 表头
+
+// 获取文件夹中的所有文件
+list = getFileList(inputDir);
+
+// 遍历文件夹中的每个文件
+for (i = 0; i < list.length; i++) {
+    // 检查文件是否为图像文件（如 TIFF、PNG、JPG 等）
+    if (endsWith(list[i], ".tif") || endsWith(list[i], ".png") || endsWith(list[i], ".jpg")) {
+        open(inputDir + list[i]);  // 打开图像
+        
+        // 转换为 8 位或 16 位图像（如果需要）
+        // run("8-bit");  // 如果是 16 位图像，可以使用 run("16-bit");
+
+        // 计算平均荧光强度
+        run("Measure");
+        meanIntensity = getResult("Mean", 0);
+        
+        // 将文件名和平均荧光强度写入 CSV 文件
+        print(file, list[i] + "," + meanIntensity);
+        
+        // 关闭图像
+        close();
+        
+        // 清空结果表格中的数据
+        run("Clear Results");
+    }
+}
+
+// 关闭文件
+File.close(file);
+
+print("所有图片的平均荧光强度已测量完毕，并保存到 " + outputFile);
