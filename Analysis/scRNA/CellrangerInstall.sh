@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Download cellranger form https://www.10xgenomics.com/support/software/cell-ranger/downloads
 #chose your ture url
 # ex
