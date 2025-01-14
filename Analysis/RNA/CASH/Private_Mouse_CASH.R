@@ -1,3 +1,14 @@
+# -------------------------------
+# Script Name: CASH_RNAseq.R
+# Data：Self
+# Purpose: 分析CASH
+# Author: WangYong
+# Date: 2025-1-10
+
+
+
+
+# 加载库和设置 ------------------------------------
 library(DESeq2)
 library(sva)
 library(ggplot2)
@@ -15,21 +26,22 @@ count_matrix <- as.matrix(countData[, 6:ncol(countData)])  # 去除前五列
 # 修改列名：去掉 "_sorted.bam"
 colnames(count_matrix) <- gsub("_sorted.bam$", "", colnames(count_matrix))
 
-# 创建 colData，确保包含 condition 列
+# 样本信息表
 colData <- data.frame(
-  row.names = colnames(count_matrix),  # 使用 count_matrix 的列名
-  condition = c("CASH", "CASH", "CASH", 
-                "CASH_6W", "CASH_6W", "CASH_6W", 
-                "NC", "NC", "NC", 
-                "NCnet", "NCnet", "NCnet", "NCnet", "NCnet"),  # 根据样本数填充
-  batch = c("Batch1", "Batch1", "Batch1", 
-            "Batch1", "Batch1", "Batch1", 
-            "Batch1", "Batch1", "Batch1", 
-            "Batch2", "Batch2", "Batch2", "Batch2", "Batch2")  # 根据实际情况填充
+  row.names = colnames(count_matrix),
+  condition = factor(c(
+    rep("CASH", 3),
+    rep("CASH_6W", 3),
+    rep("NC", 3),
+    rep("NCnet", 5)
+  ), levels = c("CASH", "CASH_6W", "NC", "NCnet"))
 )
+
+
 # 筛选非 NCnet 的样本
 colData_filtered <- colData[!(colData$condition %in% c("NCnet", "CASH_6W")), ]
 count_matrix_filtered <- count_matrix[, rownames(colData_filtered)]
+
 # 创建 DESeq2 数据集对象
 dds_filtered <- DESeqDataSetFromMatrix(
   countData = count_matrix_filtered, 
