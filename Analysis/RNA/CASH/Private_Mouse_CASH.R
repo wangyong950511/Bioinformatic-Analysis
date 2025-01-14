@@ -30,17 +30,20 @@ colnames(count_matrix) <- gsub("_sorted.bam$", "", colnames(count_matrix))
 colData <- data.frame(
   row.names = colnames(count_matrix),
   condition = factor(c(
-    rep("CASH", 3),
+    rep("CASH_4W", 3),
     rep("CASH_6W", 3),
     rep("NC", 3),
     rep("NCnet", 5)
-  ), levels = c("CASH", "CASH_6W", "NC", "NCnet"))
+  ), levels = c("CASH_4W", "CASH_6W", "NC", "NCnet"))
 )
 
+# 筛选非 "NC" 和 "NCnet" 的样本
+colData_filtered <- colData[!(colData$condition %in% c("NCnet", "CASH_6W")), , drop = FALSE]
+# 删除未使用的因子水平
+colData_filtered$condition <- droplevels(colData_filtered$condition)
+# 提取过滤后的矩阵
+count_matrix_filtered <- count_matrix[, rownames(colData_filtered), drop = FALSE]
 
-# 筛选非 NCnet 的样本
-colData_filtered <- colData[!(colData$condition %in% c("NCnet", "CASH_6W")), ]
-count_matrix_filtered <- count_matrix[, rownames(colData_filtered)]
 
 # 创建 DESeq2 数据集对象
 dds_filtered <- DESeqDataSetFromMatrix(
@@ -51,10 +54,7 @@ dds_filtered <- DESeqDataSetFromMatrix(
 # 运行差异表达分析
 dds_filtered <- DESeq(dds_filtered)
 # 获取比较结果，例：CASH_4W 和 NC 的差异表达分析
-results_filtered <- results(dds_filtered, contrast = c("condition", "CASH", "NC"))
-# 查看结果
-head(results_filtered[order(results_filtered$pvalue), ])
-
+results_filtered <- results(dds_filtered, contrast = c("condition", "CASH_4W", "NC"))
 
 
 
@@ -71,76 +71,105 @@ pca_plot <- ggplot(pcaData_filtered, aes(PC1, PC2, color = condition)) +
 print(pca_plot)
 
 
-####绘制热图####
-
-# 指定感兴趣的基因集
-gene_set <- c("Atm", "Atr", "Brca1", "Brca2", "Chk1", "Chk2",  
-              "Rad51", "Mlh1", "Msh2", "Parp1", "Fancd2", 
-              "Wrn","Xpc", "Rpa1", "Marco")  # 替换为实际基因名
-# 检查基因是否存在于表达矩阵中
-gene_set_filtered <- gene_set[gene_set %in% rownames(count_matrix_filtered)]
-if (length(gene_set_filtered) == 0) {
-  stop("None of the genes in the gene set are present in the count matrix.")
+####绘制热图（预运行）####
+# 定义函数：绘制基因集的热图
+plot_gene_set_heatmap <- function(gene_set, count_matrix, colData, title = "Heatmap of Gene Set") {
+  # Step 1: 检查基因是否存在于表达矩阵中
+  gene_set_filtered <- gene_set[gene_set %in% rownames(count_matrix)]
+  if (length(gene_set_filtered) == 0) {
+    stop("None of the genes in the gene set are present in the count matrix.")
+  }
+  
+  # Step 2: 提取基因表达数据
+  heatmap_data <- count_matrix[gene_set_filtered, ]
+  
+  # Step 3: 标准化基因表达（例如 Z-score）
+  heatmap_data_scaled <- t(scale(t(heatmap_data)))  # 按行（基因）标准化
+  
+  # Step 4: 确保标准化后没有 NA 值（可能由于单基因或样本全零导致）
+  heatmap_data_scaled[is.na(heatmap_data_scaled)] <- 0
+  
+  # Step 5: 按分组排序样本
+  # 指定分组顺序
+  desired_order <- c("NC", "CASH_4W")
+  colData$condition <- factor(colData$condition, levels = desired_order)  # 按指定顺序设置因子
+  sorted_indices <- order(colData$condition)  # 根据因子排序
+  
+  # 重新排序表达矩阵和注释数据
+  heatmap_data_scaled <- heatmap_data_scaled[, sorted_indices]
+  annotation_col <- data.frame(Condition = colData$condition[sorted_indices])
+  rownames(annotation_col) <- colnames(heatmap_data_scaled)
+  
+  # Step 6: 检查数据一致性
+  if (!all(rownames(annotation_col) == colnames(heatmap_data_scaled))) {
+    stop("Column names in heatmap data do not match annotation data.")
+  }
+  
+  # Step 7: 绘制热图
+  library(pheatmap)
+  pheatmap(
+    heatmap_data_scaled,          # 标准化的表达矩阵
+    cluster_rows = TRUE,          # 对基因聚类
+    cluster_cols = FALSE,         # 不对样本聚类
+    annotation_col = annotation_col,  # 样本分组注释
+    fontsize_row = 10,            # 调整基因字体大小
+    fontsize_col = 10,            # 调整样本字体大小
+    main = title                  # 图标题
+  )
 }
-# 提取基因表达数据
-heatmap_data <- count_matrix_filtered[gene_set_filtered, ]
-# 标准化基因表达（例如 Z-score）
-heatmap_data_scaled <- t(scale(t(heatmap_data)))  # 按行（基因）标准化
-# 确保标准化后没有 NA 值（可能由于单基因或样本全零导致）
-heatmap_data_scaled[is.na(heatmap_data_scaled)] <- 0
-# 按分组排序样本（根据 colData_filtered 的 condition）
-colData_filtered$condition <- factor(colData_filtered$condition, levels = unique(colData_filtered$condition))  # 确保条件顺序
-sorted_indices <- order(colData_filtered$condition)  # 根据分组排序索引
-# 重新排序表达矩阵和注释数据
-heatmap_data_scaled <- heatmap_data_scaled[, sorted_indices]
-annotation_col <- data.frame(Condition = colData_filtered$condition[sorted_indices])
-rownames(annotation_col) <- colnames(heatmap_data_scaled)
-# 检查数据一致性
-if (!all(rownames(annotation_col) == colnames(heatmap_data_scaled))) {
-  stop("Column names in heatmap data do not match annotation data.")
-}
-# 绘制热图
-library(pheatmap)
-pheatmap(
-  heatmap_data_scaled,  # 标准化的表达矩阵
-  cluster_rows = TRUE,  # 对基因聚类
-  cluster_cols = FALSE,  # 不对样本聚类
-  annotation_col = annotation_col,  # 样本分组注释
-  fontsize_row = 10,    # 调整基因字体大小
-  fontsize_col = 10,    # 调整样本字体大小
-  main = "Heatmap of Genes Related to （DDR）"  # 图标题
-)
 
-
-####特定基因分析####
-gene_of_interest <- "Slc27a6"  # 替换为您感兴趣的基因名称
-if (gene_of_interest %in% rownames(results_filtered)) {
-  gene_results <- results_filtered[gene_of_interest, ]
-  log2_fold_change <- gene_results$log2FoldChange
-  p_value <- gene_results$pvalue
-  padj <- gene_results$padj
-  # 打印结果
-  cat("Log2 Fold Change:", log2_fold_change, "\n")
-  cat("P-value:", p_value, "\n")
-  cat("Adjusted P-value:", padj, "\n")
-  # 获取该基因在不同样本中的表达数据
-  gene_expression <- count_matrix_filtered[gene_of_interest, ]
+####特定基因分析（预运行）####
+# 定义函数
+analyze_gene_expression <- function(gene_of_interest, count_matrix, colData_filtered) {
+  # Step 1: 检查基因是否存在于表达矩阵
+  if (!(gene_of_interest %in% rownames(count_matrix))) {
+    stop(paste("目标基因", gene_of_interest, "不存在于表达矩阵中，请检查数据是否包含该基因。"))
+  }
+  
+  # Step 2: 获取该基因的表达数据
+  gene_expression <- count_matrix[gene_of_interest, ]
   expression_data <- data.frame(
-    sample = colnames(count_matrix_filtered),
+    sample = colnames(count_matrix),
     expression = gene_expression,
     condition = colData_filtered$condition
   )
-  # 绘制箱线图
-  boxplot <- ggplot(expression_data, aes(x = condition, y = expression, fill = condition)) +
-    geom_boxplot() +
-    labs(title = paste("Expression of", gene_of_interest), x = "Condition", y = "Expression") +
-    theme_minimal()
-  print(boxplot)
-} else {
-  # 基因不在结果中，输出提示信息
-  cat("The gene", gene_of_interest, "is not found in the filtered results.\n")
+  # Step 3: 设置 Condition 的因子顺序
+  expression_data$condition <- factor(expression_data$condition, levels = c("NC", "CASH_4W"))
+  # Step 4: 按 Condition 因子水平排序数据框
+  expression_data <- expression_data[order(expression_data$condition), ]
+  # Step 5: 自定义颜色
+  custom_colors_fill <- c("NC" = "white", "CASH_4W" = "white")
+  custom_colors_color <- c("NC" = "#2ca02c", "CASH_4W" = "#FFC07C")
+  # Step 6: 绘制箱线图
+  plot <- ggplot(expression_data, aes(x = condition, y = expression, fill = condition)) +
+    geom_boxplot(outlier.shape = NA, aes(color = condition)) +  # 边框颜色根据 Condition 设置
+    scale_fill_manual(values = custom_colors_fill) +  # 自定义填充颜色
+    scale_color_manual(values = custom_colors_color) +  # 自定义边框颜色
+    labs(
+      title = paste("Expression of", gene_of_interest, "across Groups"),
+      x = "Condition",
+      y = "Expression"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      legend.position = "right"
+    )
+  # 返回绘图
+  return(plot)
 }
-
+####示例运行####
+# 单基因分析
+analyze_gene_expression("Myc", count_matrix_filtered, colData_filtered)
+# 示例调用
+gene_set <- c("Atm", "Atr", "Brca1", "Brca2", "Chk1", "Chk2", "Rad51", "Mlh1", "Msh2", 
+              "Parp1", "Fancd2", "Wrn", "Xpc", "Rpa1", "Myc", "Trp53")
+plot_gene_set_heatmap(
+  gene_set = gene_set,
+  count_matrix = count_matrix_filtered,
+  colData = colData_filtered,
+  title = "Heatmap of Genes Related to DDR"
+)
 ####差异基因####
 # 提取显著差异表达基因
 # 移除 NA 值
