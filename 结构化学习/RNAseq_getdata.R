@@ -53,3 +53,27 @@ geo_selected$condition<- gsub(" \\+20% mannose", "_20_mannose", geo_selected$con
 geo_selected$condition<- gsub("treatment: Normal Diet", "NC", geo_selected$condition)
 geo_selected$condition<- gsub("treatment: FAT-MASH Diet", "MASH", geo_selected$condition)
 geo_selected$condition<- gsub(" \\((therapy|Therapy)\\)", "_Therapy", geo_selected$condition)
+geo_selected$condition <- factor(geo_selected$condition)
+# 获取 countData 的列名并对geo_selected进行排序
+sample_order <- colnames(countData)
+geo_selected <- geo_selected[match(sample_order, rownames(geo_selected)), , drop = FALSE]
+
+
+
+# 构建 DESeq2 对象
+dds <- DESeqDataSetFromMatrix(
+  countData = count_matrix,
+  colData = geo_selected,
+  design = ~ condition
+)
+dds <- dds[rowSums(counts(dds)) > 10, ]
+# 运行差异表达分析
+dds <- DESeq(dds)
+vsd <- vst(dds, blind = FALSE)
+
+
+
+
+
+
+
