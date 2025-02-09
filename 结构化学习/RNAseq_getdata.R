@@ -17,12 +17,6 @@ gene_mapping <- AnnotationDbi::select(
   keytype = "ENSEMBL"                   # 关键列类型：ENSG ID
 )
 
-
-
-
-
-
-
 ### 常规
 # 输出重复值
 duplicated_symbols <- unique(gene_mapping$SYMBOL[duplicated(gene_mapping$SYMBOL)])
@@ -45,13 +39,15 @@ colnames(countData) <- sub("_.*", "", colnames(countData))
 colnames(countData) <- sub("^([^_]*_[^_]*)_.*", "\\1", colnames(countData))
 
 
+# 提取样本计数数据
+count_matrix <- as.matrix(countData)  # 修剪数据
 
+
+
+
+## 二、读取分组信息
 # 阅读结构
 readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
-
-
-
-
 # 读取文件
 geo_data <- read.delim("~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.gz", header = TRUE, sep = "\t", skip = 28)
 # 转置数据（确保是字符矩阵）
