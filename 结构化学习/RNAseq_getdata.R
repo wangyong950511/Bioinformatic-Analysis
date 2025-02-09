@@ -6,27 +6,43 @@ readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
 countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", header = TRUE, row.names = 1)
 ### 变种1-跳过
 countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", skip=1,header = TRUE, row.names = 1)
+
+
 ## 二、处理矩阵
+# 获取基因名映射
+gene_mapping <- AnnotationDbi::select(
+  org.Mm.eg.db,                         # 人物种为Hs，鼠为Mm
+  keys = rownames(countData),           # 使用 countData 的行名（ENSG ID）
+  columns = c("SYMBOL"),                # 想要的列：基因名
+  keytype = "ENSEMBL"                   # 关键列类型：ENSG ID
+)
+
+
+
+
+
+
+
 ### 常规
-\# 输出重复值
+# 输出重复值
 duplicated_symbols <- unique(gene_mapping$SYMBOL[duplicated(gene_mapping$SYMBOL)])
-\# 去除 SYMBOL 中为空值的行
+# 去除 SYMBOL 中为空值的行
 gene_mapping <- gene_mapping[!is.na(gene_mapping$SYMBOL), ]  
 countData$SYMBOL <- gene_mapping$SYMBOL[match(rownames(countData), gene_mapping$ENSEMBL)]
-\# 去除 SYMBOL 为 NA 的行
+# 去除 SYMBOL 为 NA 的行
 countData <- countData[!is.na(countData$SYMBOL), ]
-\# 合并重复基因名（按 SYMBOL 分组叠加值）
+# 合并重复基因名（按 SYMBOL 分组叠加值）
 countData <- aggregate(. ~ SYMBOL, data = countData, sum)
-\# 将 SYMBOL 列作为行名
+# 将 SYMBOL 列作为行名
 rownames(countData) <- countData$SYMBOL
 countData <- countData[, -1]  # 删除 SYMBOL 列
 ### 更改列名
 #### 常规
 colnames(countData) <- gsub("Sample_", "S", colnames(countData))  # 将 "Sample_" 替换为 "S"
 #### 保留第一个_之前的文字
-colnames(countData) <- sub("_.\*", "", colnames(countData))
+colnames(countData) <- sub("_.*", "", colnames(countData))
 #### 保留第二个_之前的文字
-colnames(countData) <- sub("^([^_]\*_[^_]\*)_.\*", "\\1", colnames(countData))
+colnames(countData) <- sub("^([^_]*_[^_]*)_.*", "\\1", colnames(countData))
 
 
 
