@@ -51,10 +51,9 @@ readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
 
 
 
-# 定义文件路径
-file_path <- "~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.gz"
+
 # 读取文件
-geo_data <- read.delim(file_path, header = TRUE, sep = "\t", skip = 28)
+geo_data <- read.delim("~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.gz", header = TRUE, sep = "\t", skip = 28)
 # 转置数据（确保是字符矩阵）
 geo_transposed <- as.data.frame(t(geo_data), stringsAsFactors = FALSE)
 geo_transposed <- geo_transposed[-1, ]  # 删除第一行
