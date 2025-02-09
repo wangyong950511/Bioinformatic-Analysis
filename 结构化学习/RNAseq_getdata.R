@@ -3,9 +3,9 @@
 # 阅读结构
 readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
 ### 常规
-countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", header = TRUE, row.names = 1)
-### 变种1-跳过
-countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", skip=1,header = TRUE, row.names = 1)
+countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", skip=0,header = TRUE, row.names = 1)
+### 变种1-读取xlsx文件
+count_data <- read_excel("~/R/RNA/data/NASH/GSE253217/GSE253217_Liver_tmm_normalized_counts.xlsx")
 
 
 ## 二、处理矩阵
@@ -14,7 +14,7 @@ gene_mapping <- AnnotationDbi::select(
   org.Mm.eg.db,                         # 人物种为Hs，鼠为Mm
   keys = rownames(countData),           # 使用 countData 的行名（ENSG ID）
   columns = c("SYMBOL"),                # 想要的列：基因名
-  keytype = "ENSEMBL"                   # 关键列类型：ENSG ID
+  keytype = "ENSEMBL"                   # 关键列类型：ENSG ID,,ENTREZID
 )
 
 ### 常规
