@@ -82,7 +82,12 @@ dds <- dds[rowSums(counts(dds)) > 10, ]
 dds <- DESeq(dds)
 vsd <- vst(dds, blind = FALSE)
 
+colData_GSE269493 <- geo_selected
+vsd_GSE269493 <- vsd
+save(vsd_GSE269493,colData_GSE269493, file = "~/R/RNA/data/NASH/GSE269493/Data_GSE269493.RData")
 
+# 加载数据
+load("~/R/RNA/data/NASH/GSE269493/Data_GSE269493.RData")
 
 
 
