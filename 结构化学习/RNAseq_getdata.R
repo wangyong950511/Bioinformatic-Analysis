@@ -27,7 +27,7 @@ gene_mapping <- AnnotationDbi::select(
 # 输出重复值
 duplicated_symbols <- unique(gene_mapping$SYMBOL[duplicated(gene_mapping$SYMBOL)])
 # 去除 SYMBOL 中为空值的行
-gene_mapping <- gene_mapping[!is.na(gene_mapping$SYMBOL), ]  
+gene_mapping <- gene_mapping[!is.na(gene_mapping$SYMBOL), ]
 countData$SYMBOL <- gene_mapping$SYMBOL[match(rownames(countData), gene_mapping$ENSEMBL)]
 # 去除 SYMBOL 为 NA 的行
 countData <- countData[!is.na(countData$SYMBOL), ]
@@ -35,7 +35,7 @@ countData <- countData[!is.na(countData$SYMBOL), ]
 countData <- aggregate(. ~ SYMBOL, data = countData, sum)
 # 将 SYMBOL 列作为行名
 rownames(countData) <- countData$SYMBOL
-countData <- countData[, -1]  # 删除 SYMBOL 列
+countData <- countData[, -1]  # 删除 SYMBOL 列
 ### 更改列名
 #### 常规
 colnames(countData) <- gsub("Sample_", "S", colnames(countData))  # 将 "Sample_" 替换为 "S"
