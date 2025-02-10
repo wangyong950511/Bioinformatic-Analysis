@@ -45,10 +45,6 @@ colnames(countData) <- sub("_.*", "", colnames(countData))
 colnames(countData) <- sub("^([^_]*_[^_]*)_.*", "\\1", colnames(countData))
 
 
-# 提取样本计数数据
-count_matrix <- as.matrix(countData)  # 修剪数据
-
-
 
 
 ## 二、读取分组信息
@@ -94,7 +90,9 @@ geo_selected <- data.frame(
 
 
 
-
+## 二、提取差异数组（均一化处理）
+# 提取样本计数数据
+count_matrix <- as.matrix(countData)  # 修剪数据
 # 构建 DESeq2 对象
 dds <- DESeqDataSetFromMatrix(
   countData = count_matrix,
