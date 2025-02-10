@@ -52,8 +52,9 @@ count_matrix <- as.matrix(countData)  # 修剪数据
 
 
 ## 二、读取分组信息
-# 阅读结构
-readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
+# 1、阅读series_matrix文件
+# 文件结构
+readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.gz", n = 50)
 # 读取文件
 geo_data <- read.delim("~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.gz", header = TRUE, sep = "\t", skip = 28)
 # 转置数据（确保是字符矩阵）
@@ -74,6 +75,23 @@ geo_selected$condition <- factor(geo_selected$condition)
 # 获取 countData 的列名并对geo_selected进行排序
 sample_order <- colnames(countData)
 geo_selected <- geo_selected[match(sample_order, rownames(geo_selected)), , drop = FALSE]
+
+
+# 2、新建样本信息表
+geo_selected <- data.frame(
+  row.names = colnames(count_matrix),
+  condition = factor(c(
+    rep("aaa", 4),
+    rep("bbb", 11),
+    rep("ccc", 5),
+    rep("ddd", 6),
+    rep("eee", 6)
+  ), levels = c("aaa", "bbb", "ccc", "ddd", "eee"))
+)
+
+
+
+
 
 
 
