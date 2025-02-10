@@ -3,7 +3,7 @@ load("~/R/RNA/data/NASH/GSE287943/Data_GSE287943.RData")
 
 
 # vsd单组简易函数
-analyze_gene_expression <- function(GeneX, vsd, colData) {
+analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
   # Step 1: 检查基因是否存在于表达矩阵
   if (!(GeneX %in% rownames(vsd))) {
     stop("目标基因不存在于表达矩阵中，请检查数据是否包含该基因。")
@@ -54,4 +54,4 @@ analyze_gene_expression <- function(GeneX, vsd, colData) {
   # 返回绘图
   return(plot)
 }
-analyze_gene_expression("Trip6", vsd_GSE287943, colData_GSE287943)
+analyze_gene_expression_GSEnnn("Trip6", vsd_GSEnnn, colData_GSEnnn)
