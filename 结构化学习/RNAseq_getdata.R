@@ -75,7 +75,7 @@ geo_selected <- geo_selected[match(sample_order, rownames(geo_selected)), , drop
 
 # 2、新建样本信息表
 geo_selected <- data.frame(
-  row.names = colnames(count_matrix),
+  row.names = colnames(countData),
   condition = factor(c(
     rep("aaa", 4),
     rep("bbb", 11),
