@@ -57,7 +57,7 @@ geo_data <- read.delim("~/R/RNA/data/NASH/GSE287943/GSE287943_series_matrix.txt.
 geo_transposed <- as.data.frame(t(geo_data), stringsAsFactors = FALSE)
 geo_transposed <- geo_transposed[-1, ]  # 删除第一行
 # 选取需要列（第一个为列名）
-geo_selected <- geo_transposed[, c(22,13)]
+geo_selected <- geo_transposed[, c(9), drop = FALSE]
 rownames(geo_selected) <- geo_selected[, 1]  # 将第一列设为行名
 geo_selected <- geo_selected[, -1, drop = FALSE]
 colnames(geo_selected) <- c("condition")
@@ -68,9 +68,15 @@ geo_selected$condition<- gsub("treatment: Normal Diet", "NC", geo_selected$condi
 geo_selected$condition<- gsub("treatment: FAT-MASH Diet", "MASH", geo_selected$condition)
 geo_selected$condition<- gsub(" \\((therapy|Therapy)\\)", "_Therapy", geo_selected$condition)
 geo_selected$condition <- factor(geo_selected$condition)
-# 获取 countData 的列名并对geo_selected进行排序
+
+
+# a.获取 countData 的列名并对geo_selected进行排序（如果需要）
 sample_order <- colnames(countData)
 geo_selected <- geo_selected[match(sample_order, rownames(geo_selected)), , drop = FALSE]
+# b.修改行名（如果需要）
+rownames(geo_selected) <- paste0("x", rownames(geo_selected))
+
+
 
 
 # 2、新建样本信息表
