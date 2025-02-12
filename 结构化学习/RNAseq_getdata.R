@@ -36,13 +36,17 @@ countData <- aggregate(. ~ SYMBOL, data = countData, sum)
 # 将 SYMBOL 列作为行名
 rownames(countData) <- countData$SYMBOL
 countData <- countData[, -1]  # 删除 SYMBOL 列
-### 更改列名
-#### 常规
+
+
+### 更改列名及行名（如果需要）
+#常规
 colnames(countData) <- gsub("Sample_", "S", colnames(countData))  # 将 "Sample_" 替换为 "S"
-#### 保留第一个_之前的文字
+##保留第一个_之前的文字
 colnames(countData) <- sub("_.*", "", colnames(countData))
-#### 保留第二个_之前的文字
+# 保留第二个_之前的文字
 colnames(countData) <- sub("^([^_]*_[^_]*)_.*", "\\1", colnames(countData))
+# 去除行名
+rownames(geo_selected) <- sub("\\..*", "", rownames(geo_selected))
 
 
 
