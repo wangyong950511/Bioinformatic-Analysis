@@ -32,7 +32,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
   # Step 7: 自定义颜色（动态生成）
   unique_conditions <- levels(gene_df$Condition)
   custom_colors_fill <- setNames(rep("white", length(unique_conditions)), unique_conditions)
-  custom_colors_color <- setNames(rainbow(length(unique_conditions)), unique_conditions)
+  custom_colors_color <- setNames(getplotcolors(length(unique_conditions)), unique_conditions)
   
   # Step 8: 绘制箱线图
   plot <- ggplot(gene_df, aes(x = Condition, y = Expression, fill = Condition)) +
