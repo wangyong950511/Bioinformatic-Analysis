@@ -8,6 +8,8 @@ countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz"
 count_data <- read_excel("~/R/RNA/data/NASH/GSE253217/GSE253217_Liver_tmm_normalized_counts.xlsx")
 ### 变种1-读取tsv文件
 df <- read_tsv("~/R/RNA/data/NASH/GSE236832/GSE236832_de_summary.tsv.gz", skip = 1)
+### 变种1-读取csv文件
+countData <- read.csv(gzfile("~/R/RNA/data/NASH/GSE230745/GSE230745_kidney_chp_raw_counts.csv.gz"), header = TRUE, row.names = 1)
 ### 万能解决
 countData <- read.delim(gzfile("~/R/RNA/data/NASH/GSE275069/GSM8465145_Matrix_HF_vs_ND.txt.gz"),header = TRUE,sep = "\t",fill = TRUE)
 
