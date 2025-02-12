@@ -54,4 +54,4 @@ analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
   # 返回绘图
   return(plot)
 }
-analyze_gene_expression_GSEnnn("Trip6", vsd_GSEnnn, colData_GSEnnn)
+analyze_gene_expression_GSEnnn("Col1a1", vsd_GSEnnn, colData_GSEnnn)
