@@ -1,3 +1,16 @@
+library(DESeq2)
+library(sva)
+library(ggplot2)
+library(ggpubr)
+library(ggthemes)
+library(dplyr)
+library(pheatmap)
+library(org.Hs.eg.db)
+library(data.table)
+
+
+
+
 # 模块化代码
 ## 一、导入矩阵代码
 # 阅读结构
