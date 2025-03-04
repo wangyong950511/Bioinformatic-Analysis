@@ -4,4 +4,4 @@
 tar -xvf *.tar
 
 # 解压gz
-gunzip filename.gz
+gunzip *.gz
