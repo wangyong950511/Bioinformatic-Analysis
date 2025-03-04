@@ -7,6 +7,7 @@ library(dplyr)
 library(pheatmap)
 library(org.Hs.eg.db)
 library(data.table)
+library(myplotColors)
 
 
 
