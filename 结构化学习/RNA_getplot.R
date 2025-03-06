@@ -10,6 +10,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
   }
   
   # Step 2: 获取目标基因的表达值
+  # gene_expression <- as.numeric(vsd[GeneX, ])
   gene_expression <- assay(vsd)[GeneX, ]
   gene_df <- data.frame(
     Expression = gene_expression,
