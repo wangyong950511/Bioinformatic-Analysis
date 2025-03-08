@@ -104,11 +104,10 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
     stat_test +  
     labs(
       title = paste("GSEnnn"),
-      x = "Condition",
+      x = NULL,
       y = "Expression Level",
       caption = logFC_label  # 在图的底部添加 logFC 值
     ) +
-    labs(x = NULL)+
     theme_minimal() +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1),
