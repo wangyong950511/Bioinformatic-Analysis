@@ -1,7 +1,7 @@
 library(limma)
 
 
-analyze_gene_expression_GSE154892 <- function(GeneX, expr_matrix, colData) {
+analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   # Step 1: 确保表达矩阵是数值型
   expr_matrix <- as.matrix(expr_matrix)
   
@@ -56,7 +56,7 @@ analyze_gene_expression_GSE154892 <- function(GeneX, expr_matrix, colData) {
     scale_color_manual(values = custom_colors_color) +  
     stat_test +  
     labs(
-      title = paste("Expression of", GeneX),
+      title = paste("GSEnnn"),
       x = "Condition",
       y = "Expression Level",
       caption = logFC_label  # 在图的底部添加 logFC
@@ -64,7 +64,7 @@ analyze_gene_expression_GSE154892 <- function(GeneX, expr_matrix, colData) {
     theme_minimal() +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1),
-      legend.position = "right"
+      legend.position = "none"
     )
   
   return(plot)
