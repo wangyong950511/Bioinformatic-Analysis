@@ -42,7 +42,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
     scale_color_manual(values = custom_colors_color) +  
     stat_test +  
     labs(
-      title = paste("Expression of", GeneX),
+      title = paste("GSEnnn"),
       x = "Condition",
       y = "Expression Level"
     ) +
@@ -103,7 +103,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
     scale_color_manual(values = custom_colors_color) +  
     stat_test +  
     labs(
-      title = paste("Expression of", GeneX),
+      title = paste("GSEnnn"),
       x = "Condition",
       y = "Expression Level",
       caption = logFC_label  # 在图的底部添加 logFC 值
