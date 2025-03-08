@@ -61,8 +61,8 @@ analyze_gene_expression_GSEnnn("Col1a1", vsd_GSEnnn, colData_GSEnnn)
 
 ## 带logFC的数据图
 # 获取数据
-load("~/R/RNA/data/NASH/GSE263975/Data_GSE263975.RData")
-analyze_gene_expression_GSE263975 <- function(GeneX, dds,colData) {
+load("~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
+analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
   vsd <- vst(dds, blind = FALSE)
   # Step 1: 检查基因是否存在于表达矩阵
   if (!(GeneX %in% rownames(vsd))) {
@@ -118,5 +118,5 @@ analyze_gene_expression_GSE263975 <- function(GeneX, dds,colData) {
   # 返回绘图
   return(plot)
 }
-analyze_gene_expression_GSE263975("Thrb",dds_GSE263975,colData_GSE263975)
+analyze_gene_expression_GSEnnn("Thrb",dds_GSEnnn,colData_GSEnnn)
 
