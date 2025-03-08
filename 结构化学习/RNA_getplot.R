@@ -49,7 +49,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, vsd, colData) {
     theme_minimal() +
     theme(
       axis.text.x = element_text(angle = 45, hjust = 1),
-      legend.position = "right"
+      legend.position = "none"
     )
   
   # 返回绘图
