@@ -131,8 +131,8 @@ dds <- DESeq(dds)
 vsd <- vst(dds, blind = FALSE)
 
 colData_GSEnnn <- geo_selected
-vsd_GSEnnn <- vsd
-save(vsd_GSEnnn,colData_GSEnnn, file = "~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
+dds_GSEnnn <- dds
+save(dds_GSEnnn,colData_GSEnnn, file = "~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
 
 # 加载数据
 load("~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
