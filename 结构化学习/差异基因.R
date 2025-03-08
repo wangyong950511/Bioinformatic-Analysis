@@ -1,7 +1,7 @@
 
 
 # 获取差异表达结果
-res <- results(dds, contrast = c("condition", "CDAHFD_7w", "NC"))
+res <- results(dds, contrast = c("condition", "Exp", "Ctrl"))
 # 过滤显著差异表达基因 (FDR < 0.05)
 res_filtered <- res[which(res$padj < 0.05), ]
 # 按照 log2FoldChange 排序
