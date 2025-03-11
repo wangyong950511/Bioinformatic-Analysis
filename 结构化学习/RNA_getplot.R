@@ -117,5 +117,5 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
   # 返回绘图
   return(plot)
 }
-analyze_gene_expression_GSEnnn("Thrb",dds_GSEnnn,colData_GSEnnn)
+analyze_gene_expression_GSEnnn("Col1a1",dds_GSEnnn,colData_GSEnnn)
 
