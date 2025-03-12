@@ -19,9 +19,9 @@ readLines("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", n = 50)
 ### 常规
 countData <- read.table("~/R/RNA/data/NASH/GSE287943/GSE287943_countData.txt.gz", skip=0,header = TRUE, row.names = 1)
 ### 变种1-读取xlsx文件
-count_data <- read_excel("~/R/RNA/data/NASH/GSE253217/GSE253217_Liver_tmm_normalized_counts.xlsx")
+countData <- read_excel("~/R/RNA/data/NASH/GSE253217/GSE253217_Liver_tmm_normalized_counts.xlsx")
 ### 变种1-读取tsv文件
-df <- read_tsv("~/R/RNA/data/NASH/GSE236832/GSE236832_de_summary.tsv.gz")
+countData <- read_tsv("~/R/RNA/data/NASH/GSE236832/GSE236832_de_summary.tsv.gz")
 ### 变种1-读取csv文件
 countData <- read.csv(gzfile("~/R/RNA/data/NASH/GSE230745/GSE230745_kidney_chp_raw_counts.csv.gz"), header = TRUE, row.names = 1)
 ### 万能解决
