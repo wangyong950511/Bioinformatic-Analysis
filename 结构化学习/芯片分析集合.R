@@ -7,8 +7,8 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   ## 防止空值
   # offset <- abs(min(expr_matrix, na.rm = TRUE)) + 1  # 计算偏移量，使最小值变为 1
   # expr_matrix <- log2(expr_matrix + offset)
-  ## 先进行 log2 变换
-  # expr_matrix <- log2(Agilent_GSE200409 + 1)
+  ## log2 变换
+  # expr_matrix <- log2(expr_matrix + 1)
   
   # Step 2: 确保 `NC` 为基准组
   colData$condition <- relevel(factor(colData$condition), ref = "NC")
