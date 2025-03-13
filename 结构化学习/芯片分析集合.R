@@ -4,6 +4,8 @@ library(limma)
 analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   # Step 1: 确保表达矩阵是数值型
   expr_matrix <- as.matrix(expr_matrix)
+  ## 先进行 log2 变换
+  # expr_matrix <- log2(Agilent_GSE200409 + 1)
   
   # Step 2: 确保 `NC` 为基准组
   colData$condition <- relevel(factor(colData$condition), ref = "NC")
