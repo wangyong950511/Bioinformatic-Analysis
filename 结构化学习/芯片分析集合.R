@@ -57,7 +57,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
     stat_test +  
     labs(
       title = paste("GSEnnn"),
-      x = "Condition",
+      x = NULL,
       y = "Expression Level",
       caption = logFC_label  # 在图的底部添加 logFC
     ) +
