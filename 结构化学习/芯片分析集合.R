@@ -4,6 +4,9 @@ library(limma)
 analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   # Step 1: 确保表达矩阵是数值型
   expr_matrix <- as.matrix(expr_matrix)
+  ## 防止空值
+  # offset <- abs(min(expr_matrix, na.rm = TRUE)) + 1  # 计算偏移量，使最小值变为 1
+  # expr_matrix <- log2(expr_matrix + offset)
   ## 先进行 log2 变换
   # expr_matrix <- log2(Agilent_GSE200409 + 1)
   
