@@ -29,7 +29,7 @@ countData <- read.delim(gzfile("~/R/RNA/data/NASH/GSE275069/GSM8465145_Matrix_HF
 ### 自己跑上游
 rawData <- read.table("~/R/RNA/data/NASH/GSE160292/gene_counts.txt", skip=0,header = TRUE, row.names = 1)
 countData <- rawData[, -(1:5)]
-
+colnames(countData) <- sub("_.*", "", colnames(countData))
 
 
 
