@@ -3,7 +3,7 @@
 # 设置文件路径（确保路径正确）
 file_path <- "~/R/RNA/data/NASH/GSE114261/Rawdata"
 # 获取所有的 .gz 文件
-files <- list.files(file_path, pattern = ".*\\.gz$", full.names = TRUE)
+files <- list.files(file_path, pattern = ".*\\.txt$", full.names = TRUE)
 # 初始化一个空数据框用于存储数据
 combined_data <- NULL
 # 读取第一个文件并设置行名
