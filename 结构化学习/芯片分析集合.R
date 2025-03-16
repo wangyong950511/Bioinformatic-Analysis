@@ -1,6 +1,12 @@
 library(limma)
 
+# 保存
+colData_GSEnnn <- geo_selected
+Agilent_GSEnnn <- expr_matrix
+save(Agilent_GSEnnn,colData_GSEnnn, file = "~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
 
+# 加载数据
+load("~/R/RNA/data/NASH/GSEnnn/Data_GSEnnn.RData")
 analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   # Step 1: 确保表达矩阵是数值型
   expr_matrix <- as.matrix(expr_matrix)
