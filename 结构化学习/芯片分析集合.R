@@ -74,3 +74,4 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   
   return(plot)
 }
+analyze_gene_expression_GSEnnn("Col1a1", Agilent_GSEnnn, colData_GSEnnn)
