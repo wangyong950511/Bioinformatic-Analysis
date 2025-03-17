@@ -59,7 +59,7 @@ countData <- countData[, -1]  # 删除 SYMBOL 列
 
 ### 更改列名及行名（如果需要）
 #常规
-colnames(countData) <- gsub("Sample_", "S", colnames(countData))  # 将 "Sample_" 替换为 "S"
+colnames(countData) <- gsub("Sample_", "S", colnames(countData))
 ##保留第一个_之前的文字
 colnames(countData) <- sub("_.*", "", colnames(countData))
 # 保留第二个_之前的文字
