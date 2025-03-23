@@ -23,7 +23,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   design <- model.matrix(~ condition, data = colData)
   fit <- lmFit(expr_matrix, design)
   fit <- eBayes(fit)
-  results <- topTable(fit, coef = "conditionCDAHFD_12W", number = Inf, adjust.method = "BH")
+  results <- topTable(fit, coef = "conditionNASH", number = Inf, adjust.method = "BH")
   
   # Step 4: 检查基因是否在表达矩阵中
   if (!(GeneX %in% rownames(expr_matrix))) {
@@ -40,14 +40,14 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   )
   
   # Step 5: 统计分析（t-test）
-  stat_test <- stat_compare_means(comparisons = list(c("NC", "CDAHFD_12W")), 
+  stat_test <- stat_compare_means(comparisons = list(c("NC", "NASH")), 
                                   method = "t.test", label = "p.signif")
   
-  # Step 6: 仅保留 "NC" 和 "CDAHFD_12W" 组
-  gene_df <- subset(gene_df, Condition %in% c("NC", "CDAHFD_12W"))
+  # Step 6: 仅保留 "NC" 和 "NASH" 组
+  gene_df <- subset(gene_df, Condition %in% c("NC", "NASH"))
   
   # Step 7: 设置 Condition 因子顺序
-  gene_df$Condition <- factor(gene_df$Condition, levels = c("NC", "CDAHFD_12W"))
+  gene_df$Condition <- factor(gene_df$Condition, levels = c("NC", "NASH"))
   
   # Step 8: 获取 logFC 和 padj 值
   logFC_value <- results[GeneX, "logFC"]
@@ -80,4 +80,4 @@ analyze_gene_expression_GSEnnn <- function(GeneX, expr_matrix, colData) {
   
   return(plot)
 }
-analyze_gene_expression_GSEnnn("Col1a1", Agilent_GSEnnn, colData_GSEnnn)
+analyze_gene_expression_GSEnnn("COL1A1", Agilent_GSEnnn, colData_GSEnnn)
