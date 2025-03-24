@@ -155,14 +155,14 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
     Condition = colData$condition
   )
   
-  # Step 3: 仅保留 "NC" 和 "CDAHFD_7w" 组
-  gene_df <- gene_df[gene_df$Condition %in% c("NC", "CDAHFD_7w"), ]
+  # Step 3: 仅保留 "NC" 和 "NASH" 组
+  gene_df <- gene_df[gene_df$Condition %in% c("NC", "NASH"), ]
   
   # Step 4: 设置 Condition 的因子顺序
-  gene_df$Condition <- factor(gene_df$Condition, levels = c("NC", "CDAHFD_7w"))
+  gene_df$Condition <- factor(gene_df$Condition, levels = c("NC", "NASH"))
   
-  # Step 5: 统计分析（仅 NC vs. CDAHFD_7w）
-  stat_test <- stat_compare_means(comparisons = list(c("NC", "CDAHFD_7w")), 
+  # Step 5: 统计分析（仅 NC vs. NASH）
+  stat_test <- stat_compare_means(comparisons = list(c("NC", "NASH")), 
                                   method = "t.test", label = "p.signif")
   
   # Step 6: 自定义颜色
@@ -171,7 +171,7 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
   custom_colors_color <- setNames(getplotColors(length(unique_conditions)), unique_conditions)
   
   # Step 7: 获取 logFC 值
-  res <- results(dds, contrast = c("condition", "CDAHFD_7w", "NC"))
+  res <- results(dds, contrast = c("condition", "NASH", "NC"))
   logFC_value <- res[GeneX, "log2FoldChange"]
   logFC_label <- paste("logFC =", round(logFC_value, 3))
   
@@ -196,6 +196,6 @@ analyze_gene_expression_GSEnnn <- function(GeneX, dds,colData) {
   # 返回绘图
   return(plot)
 }
-analyze_gene_expression_GSEnnn("Col1a1",dds_GSEnnn,colData_GSEnnn)
+analyze_gene_expression_GSEnnn("COL1A1",dds_GSEnnn,colData_GSEnnn)
 
 
